@@ -1,0 +1,48 @@
+# CustomName Plugin Configuration
+nick-prefix: '~'
+
+gui:
+  title: '&7ᴄᴜsᴛᴏᴍ ɴᴀᴍᴇ'
+  rows: 4
+
+  preset-item:
+    material: GRAY_DYE
+    name: '&7Farb-Presets'
+    lore:
+      - '&7Klicke hier für einfache'
+      - '&7Farbpresets'
+
+  minimessage-item:
+    material: WRITABLE_BOOK
+    name: '&6MiniMessage Editor'
+    lore:
+      - '&7Erstelle deinen Namen mit'
+      - '&7MiniMessage im Chat'
+
+  back-button:
+    material: RED_STAINED_GLASS_PANE
+    name: '&cZurück'
+
+  reset-item:
+    material: BARRIER
+    name: '&cName zurücksetzen'
+    lore:
+      - '&7Setze deinen Namen auf'
+      - '&7den Standard zurück'
+
+presets:
+  - '&cRot'
+  - '&6Gold'
+  - '&eGelb'
+  - '&aGrün'
+  - '&bTürkis'
+  - '&9Blau'
+  - '&dPink'
+  - '&5Lila'
+  - '&fWeiß'
+  - '&7Grau'
+  - '&8Dunkelgrau'
+  - '&1Dunkelblau'
+  - '&2Dunkelgrün'
+  - '&4Dunkelrot'
+  - '&0Schwarz'

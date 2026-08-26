@@ -1,0 +1,27 @@
+name: CustomName
+version: 1.0.0
+main: mrzitrrone.CustomNamePlugin
+api-version: '1.21'
+folia-supported: true
+author: MrZitrrone
+description: Custom Names mit MiniMessage Support
+
+commands:
+  customname:
+    description: Ändere deinen angezeigten Namen
+    usage: /customname [MiniMessage Format]
+    aliases: [cn, nickname]
+
+permissions:
+  customname.use:
+    description: Erlaubt das Ändern der eigenen Namensfarbe
+    default: false
+  customname.nick:
+    description: Erlaubt das Ändern des kompletten Namens (Nick)
+    default: false
+  customname.admin:
+    description: Admin Berechtigung
+    default: op
+  customname.bypass.prefix:
+    description: Umgeht das Nick-Prefix
+    default: false

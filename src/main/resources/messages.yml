@@ -1,0 +1,19 @@
+prefix: ''
+
+messages:
+  no-permission: '&cDu hast keine Berechtigung dafür!'
+  no-permission-nick: '&cDu hast keine Berechtigung für Nicknames! Du kannst nur Farben ändern.'
+
+  name-changed: '&aDein Name wurde erfolgreich geändert!'
+  name-reset: '&aDein Name wurde zurückgesetzt!'
+
+  invalid-format: '&cUngültiges MiniMessage Format!'
+  name-too-long: '&cDein Name ist zu lang! Maximum: 32 Zeichen'
+
+  enter-minimessage: '&aGib dein MiniMessage Format im Chat ein:'
+  enter-minimessage-example: '&7Beispiel: &f<gradient:#FF0000:#FFFFFF>MrZitrrone</gradient>'
+  chat-cancelled: '&cEingabe abgebrochen.'
+
+  gui-opened: '&aGUI geöffnet!'
+
+  reload-success: '&aKonfiguration erfolgreich neu geladen!'
