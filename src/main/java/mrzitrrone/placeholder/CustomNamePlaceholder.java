@@ -46,6 +46,24 @@ public class CustomNamePlaceholder extends PlaceholderExpansion {
             return customName != null ? customName : player.getName();
         }
 
+        if (identifier.equals("nameonly")) {
+            return plugin.getNameManager().getNameOnly(player);
+        }
+
+        if (identifier.equals("prefix")) {
+            return mrzitrrone.util.Text.legacy(
+                    plugin.getPrefixManager().getPrefixComponent(player.getUniqueId()));
+        }
+
+        if (identifier.equals("prefix_raw")) {
+            String prefix = plugin.getPrefixManager().getRawPrefix(player.getUniqueId());
+            return prefix != null ? prefix : "";
+        }
+
+        if (identifier.equals("hasprefix")) {
+            return plugin.getPrefixManager().hasPrefix(player.getUniqueId()) ? "true" : "false";
+        }
+
         if (identifier.equals("isnick")) {
             return plugin.getNameManager().isNicked(player.getUniqueId()) ? "true" : "false";
         }

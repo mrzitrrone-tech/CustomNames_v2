@@ -1,6 +1,9 @@
 package mrzitrrone.manager;
 
 import mrzitrrone.CustomNamePlugin;
+import mrzitrrone.util.Text;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -12,6 +15,7 @@ import java.nio.file.Files;
 public class ConfigManager {
 
     private final CustomNamePlugin plugin;
+
     private FileConfiguration config;
     private FileConfiguration messages;
     private File messagesFile;
@@ -35,7 +39,7 @@ public class ConfigManager {
                     messagesFile.createNewFile();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                plugin.getLogger().warning("Konnte messages.yml nicht erstellen: " + e.getMessage());
             }
         }
         messages = YamlConfiguration.loadConfiguration(messagesFile);
@@ -47,22 +51,28 @@ public class ConfigManager {
         messages = YamlConfiguration.loadConfiguration(messagesFile);
     }
 
-    public String getMessage(String path) {
-        String prefix = messages.getString("prefix", "&6[CustomName] &7");
-        String message = messages.getString("messages." + path, "&cMessage not found: " + path);
-        return colorize(prefix + message);
+    /** Nachricht inkl. Prefix als Component (MiniMessage). */
+    public Component msg(String path, TagResolver... resolvers) {
+        String prefix = messages.getString("prefix", "");
+        String message = messages.getString("messages." + path, "<red>Message not found: " + path);
+        return Text.parse(prefix + message, resolvers);
     }
 
-    public String getMessageWithoutPrefix(String path) {
-        return colorize(messages.getString("messages." + path, "&cMessage not found: " + path));
+    /** Nachricht ohne Prefix als Component (MiniMessage). */
+    public Component msgRaw(String path, TagResolver... resolvers) {
+        String message = messages.getString("messages." + path, "<red>Message not found: " + path);
+        return Text.parse(message, resolvers);
     }
 
-    public String colorize(String text) {
-        if (text == null) return "";
-        return text.replace('&', '§');
+    public boolean hasMessage(String path) {
+        return messages.contains("messages." + path);
     }
 
     public FileConfiguration getConfig() {
         return config;
+    }
+
+    public FileConfiguration getMessages() {
+        return messages;
     }
 }

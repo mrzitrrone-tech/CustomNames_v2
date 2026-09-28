@@ -1,19 +1,37 @@
-prefix: ''
+# Alle Nachrichten unterstützen volles MiniMessage
+prefix: '<gradient:#7688FF:#9584FF><b>CustomName</b></gradient> <dark_gray>» <gray>'
 
 messages:
-  no-permission: '&cDu hast keine Berechtigung dafür!'
-  no-permission-nick: '&cDu hast keine Berechtigung für Nicknames! Du kannst nur Farben ändern.'
+  players-only: '<red>Dieser Befehl kann nur von Spielern ausgeführt werden!'
+  player-not-found: '<red>Spieler <white><player></white> wurde nicht gefunden!'
 
-  name-changed: '&aDein Name wurde erfolgreich geändert!'
-  name-reset: '&aDein Name wurde zurückgesetzt!'
+  no-permission: '<red>Du hast keine Berechtigung dafür!'
+  no-permission-nick: '<red>Du hast keine Berechtigung für Nicknames! Du kannst nur Farben ändern.'
+  no-permission-prefix: '<red>Du hast keine Berechtigung für ein eigenes Prefix!'
 
-  invalid-format: '&cUngültiges MiniMessage Format!'
-  name-too-long: '&cDein Name ist zu lang! Maximum: 32 Zeichen'
+  name-changed: '<green>Dein Name wurde geändert: <reset><name>'
+  name-reset: '<green>Dein Name wurde zurückgesetzt!'
+  name-too-long: '<red>Dein Name ist zu lang! Maximum: <max> Zeichen'
 
-  enter-minimessage: '&aGib dein MiniMessage Format im Chat ein:'
-  enter-minimessage-example: '&7Beispiel: &f<gradient:#FF0000:#FFFFFF>MrZitrrone</gradient>'
-  chat-cancelled: '&cEingabe abgebrochen.'
+  prefix-changed: '<green>Dein Prefix wurde gesetzt: <reset><prefix>'
+  prefix-changed-other: '<green>Prefix von <white><player></white> gesetzt: <reset><prefix>'
+  prefix-reset: '<green>Dein Prefix wurde entfernt!'
+  prefix-reset-other: '<green>Prefix von <white><player></white> wurde entfernt!'
+  prefix-too-long: '<red>Dein Prefix ist zu lang! Maximum: <max> Zeichen'
+  prefix-blocked: '<red>Dieses Prefix ist nicht erlaubt!'
+  prefix-disabled: '<red>Das Prefix-System ist deaktiviert!'
+  prefix-usage: '<gray>Nutzung: <white>/prefix <MiniMessage></white> <dark_gray>| <white>/prefix reset'
 
-  gui-opened: '&aGUI geöffnet!'
+  invalid-format: '<red>Ungültiges MiniMessage Format!'
 
-  reload-success: '&aKonfiguration erfolgreich neu geladen!'
+  enter-minimessage: '<green>Gib dein MiniMessage Format im Chat ein:'
+  enter-minimessage-example: '<gray>Beispiel: <white><gradient:#7688FF:#9584FF>MrZitrrone</gradient>'
+  enter-prefix: '<green>Gib dein Prefix im Chat ein:'
+  enter-prefix-example: '<gray>Beispiel: <white><b><gradient:#7688FF:#9584FF><shadow:#183931:1>Gooner</shadow></gradient></b>'
+  input-cancel-hint: '<dark_gray>Schreibe <white>cancel</white> zum Abbrechen.'
+  chat-cancelled: '<red>Eingabe abgebrochen.'
+
+  gui-opened: '<green>GUI geöffnet!'
+  gui-closed: '<gray>Menü geschlossen.'
+
+  reload-success: '<green>Konfiguration erfolgreich neu geladen!'

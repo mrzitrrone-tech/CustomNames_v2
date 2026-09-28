@@ -1,6 +1,7 @@
 package mrzitrrone.listeners;
 
 import mrzitrrone.CustomNamePlugin;
+import mrzitrrone.util.SchedulerUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,10 +18,16 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (plugin.getNameManager().hasCustomName(player.getUniqueId())) {
-            plugin.getServer().getGlobalRegionScheduler().runDelayed(plugin, (task) -> {
-                plugin.getNameManager().updatePlayerDisplayName(player);
-            }, 5L);
+
+        boolean hasName = plugin.getNameManager().hasCustomName(player.getUniqueId());
+        boolean hasPrefix = plugin.getPrefixManager().hasPrefix(player.getUniqueId());
+
+        if (!hasName && !hasPrefix) {
+            return;
         }
+
+        // Folia-sicher: im Kontext des Spielers, leicht verzögert
+        SchedulerUtil.runForPlayerLater(plugin, player,
+                () -> plugin.getNameManager().updatePlayerDisplayName(player), 5L);
     }
 }

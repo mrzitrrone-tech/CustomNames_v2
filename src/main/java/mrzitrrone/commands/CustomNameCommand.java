@@ -4,6 +4,8 @@ import mrzitrrone.CustomNamePlugin;
 import mrzitrrone.gui.CustomNameGUI;
 import mrzitrrone.manager.ConfigManager;
 import mrzitrrone.manager.NameManager;
+import mrzitrrone.util.Text;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,29 +16,47 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CustomNameCommand implements CommandExecutor, TabCompleter {
 
     private final CustomNamePlugin plugin;
-    private final NameManager nameManager;
-    private final ConfigManager configManager;
 
     public CustomNameCommand(CustomNamePlugin plugin) {
         this.plugin = plugin;
-        this.nameManager = plugin.getNameManager();
-        this.configManager = plugin.getConfigManager();
+    }
+
+    private NameManager nameManager() {
+        return plugin.getNameManager();
+    }
+
+    private ConfigManager config() {
+        return plugin.getConfigManager();
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
+
+        if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+            if (!sender.hasPermission("customname.admin")) {
+                sender.sendMessage(config().msg("no-permission"));
+                return true;
+            }
+            config().reloadConfigs();
+            plugin.getPrefixManager().load();
+            Bukkit.getOnlinePlayers().forEach(p -> nameManager().updatePlayerDisplayName(p));
+            sender.sendMessage(config().msg("reload-success"));
+            return true;
+        }
+
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("§cDieser Befehl kann nur von Spielern ausgeführt werden!");
+            sender.sendMessage(config().msg("players-only"));
             return true;
         }
 
         if (!player.hasPermission("customname.use") && !player.hasPermission("customname.admin")) {
-            player.sendMessage(configManager.getMessage("no-permission"));
+            player.sendMessage(config().msg("no-permission"));
             return true;
         }
 
@@ -46,53 +66,44 @@ public class CustomNameCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args[0].equalsIgnoreCase("reset")) {
-            nameManager.removeCustomName(player);
-            player.sendMessage(configManager.getMessage("name-reset"));
+            nameManager().removeCustomName(player);
+            player.sendMessage(config().msg("name-reset"));
             return true;
         }
 
-        if (args[0].equalsIgnoreCase("reload") && player.hasPermission("customname.admin")) {
-            configManager.reloadConfigs();
-            player.sendMessage(configManager.getMessage("reload-success"));
+        if (args[0].equalsIgnoreCase("gui") || args[0].equalsIgnoreCase("menu")) {
+            new CustomNameGUI(plugin, player).open();
             return true;
         }
 
         String fullMessage = String.join(" ", args);
+
+        if (!Text.isValid(fullMessage)) {
+            player.sendMessage(config().msg("invalid-format"));
+            return true;
+        }
+
         boolean isNick = isNickname(player.getName(), fullMessage);
-
         if (isNick && !player.hasPermission("customname.nick") && !player.hasPermission("customname.admin")) {
-            player.sendMessage(configManager.getMessage("no-permission-nick"));
+            player.sendMessage(config().msg("no-permission-nick"));
             return true;
         }
 
-        if (!validateMiniMessage(fullMessage)) {
-            player.sendMessage(configManager.getMessage("invalid-format"));
+        String plainText = Text.plain(fullMessage);
+        int max = plugin.getConfig().getInt("name.max-length", 32);
+        if (plainText.length() > max) {
+            player.sendMessage(config().msg("name-too-long", Text.placeholder("max", String.valueOf(max))));
             return true;
         }
 
-        String plainText = nameManager.stripMiniMessage(fullMessage);
-        if (plainText.length() > 32) {
-            player.sendMessage(configManager.getMessage("name-too-long"));
-            return true;
-        }
-
-        nameManager.setCustomName(player, fullMessage, isNick);
-        player.sendMessage(configManager.getMessage("name-changed"));
+        nameManager().setCustomName(player, Text.toMiniMessage(fullMessage), isNick);
+        player.sendMessage(config().msg("name-changed", Text.placeholder("name", Text.parse(fullMessage))));
         return true;
     }
 
     private boolean isNickname(String realName, String miniMessage) {
-        String plainText = nameManager.stripMiniMessage(miniMessage).toLowerCase().trim();
-        return !plainText.equals(realName.toLowerCase());
-    }
-
-    private boolean validateMiniMessage(String text) {
-        try {
-            plugin.getMiniMessage().deserialize(text);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        String plainText = Text.plain(miniMessage).toLowerCase(Locale.ROOT).trim();
+        return !plainText.equals(realName.toLowerCase(Locale.ROOT));
     }
 
     @Override
@@ -102,13 +113,23 @@ public class CustomNameCommand implements CommandExecutor, TabCompleter {
 
         if (args.length == 1) {
             completions.add("reset");
+            completions.add("gui");
             if (sender.hasPermission("customname.admin")) {
                 completions.add("reload");
             }
             if (sender instanceof Player player) {
-                completions.add("<gradient:#FF0000:#FFFFFF>" + player.getName() + "</gradient>");
+                completions.add("<gradient:#7688FF:#9584FF>" + player.getName() + "</gradient>");
                 completions.add("<rainbow>" + player.getName() + "</rainbow>");
             }
+
+            String start = args[0].toLowerCase(Locale.ROOT);
+            List<String> filtered = new ArrayList<>();
+            for (String s : completions) {
+                if (s.toLowerCase(Locale.ROOT).startsWith(start)) {
+                    filtered.add(s);
+                }
+            }
+            return filtered;
         }
 
         return completions;
