@@ -1,48 +1,220 @@
-# CustomName Plugin Configuration
+# ==========================================================
+#  CustomName – Konfiguration
+#  Alle Texte unterstützen volles MiniMessage
+#  (Farben, <gradient>, <rainbow>, <shadow>, <b>, <hover>, ...)
+#  Alte "&"-Farbcodes funktionieren weiterhin.
+#
+#  Platzhalter in GUI-Texten:
+#    <player>      = echter Spielername
+#    <name>        = aktueller CustomName (formatiert)
+#    <prefix>      = aktuelles Prefix (formatiert)
+#    <raw_name>    = CustomName als MiniMessage-Text
+#    <raw_prefix>  = Prefix als MiniMessage-Text
+#    <preview>     = komplette Vorschau (Prefix + Name)
+# ==========================================================
+
+# Zeichen vor einem Nicknamen (leer lassen zum Deaktivieren)
 nick-prefix: '~'
 
+# Anzeigenamen auch in der Tab-Liste setzen
+update-tablist: true
+
+name:
+  max-length: 32
+
+# ==========================================================
+#  PREFIX SYSTEM  ->  /prefix <MiniMessage>
+#  Beispiel:
+#  /prefix <b><gradient:#7688FF:#9584FF><shadow:#183931:1>Gooner</shadow></gradient></b>
+# ==========================================================
+prefix:
+  enabled: true
+  # Trennzeichen zwischen Prefix und Name (MiniMessage erlaubt)
+  separator: ' '
+  # Maximale Länge des Prefixes (ohne Formatierung gezählt)
+  max-length: 24
+  # Standard-Prefix für Spieler ohne eigenes Prefix (leer = keins)
+  default: ''
+  # /prefix ohne Argumente öffnet das GUI
+  open-gui-without-args: true
+  # Verbotene Wörter im Prefix
+  blocked-words:
+    - 'admin'
+    - 'owner'
+
+# ==========================================================
+#  HAUPT-GUI
+#  Jeder Slot, jedes Item, jeder Name und jede Lore-Zeile
+#  ist frei konfigurierbar. Slots werden bei 0 gezählt
+#  (Reihe 1 = 0-8, Reihe 2 = 9-17, ... Reihe 6 = 45-53).
+# ==========================================================
 gui:
-  title: '&7ᴄᴜsᴛᴏᴍ ɴᴀᴍᴇ'
-  rows: 4
+  title: '<gradient:#7688FF:#9584FF><b>ᴄᴜsᴛᴏᴍ ɴᴀᴍᴇ</b></gradient>'
+  rows: 6
+  # GUI nach einer Aktion schließen (false = GUI bleibt offen)
+  close-after-action: true
 
-  preset-item:
-    material: GRAY_DYE
-    name: '&7Farb-Presets'
-    lore:
-      - '&7Klicke hier für einfache'
-      - '&7Farbpresets'
+  # Hintergrund-Füller
+  filler:
+    enabled: true
+    material: BLACK_STAINED_GLASS_PANE
+    name: ' '
+    lore: []
 
-  minimessage-item:
-    material: WRITABLE_BOOK
-    name: '&6MiniMessage Editor'
-    lore:
-      - '&7Erstelle deinen Namen mit'
-      - '&7MiniMessage im Chat'
+  items:
+    # --- VORSCHAU: Slot & Item hier frei einstellbar ---
+    preview:
+      enabled: true
+      slot: 4
+      material: PLAYER_HEAD
+      name: '<preview>'
+      lore:
+        - '<dark_gray>▪ <gray>Name: <white><name>'
+        - '<dark_gray>▪ <gray>Prefix: <white><prefix>'
+
+    presets:
+      enabled: true
+      slot: 20
+      material: GRAY_DYE
+      name: '<gradient:#7688FF:#9584FF><b>Farben</b></gradient>'
+      lore:
+        - '<gray>Wähle eine Farbe für deinen Namen'
+
+    minimessage:
+      enabled: true
+      slot: 22
+      material: WRITABLE_BOOK
+      name: '<gradient:#7688FF:#9584FF><b>MiniMessage Name</b></gradient>'
+      lore:
+        - '<gray>Schreibe deinen Namen im Chat'
+
+    prefix:
+      enabled: true
+      slot: 24
+      material: NAME_TAG
+      name: '<gradient:#7688FF:#9584FF><b>Prefix</b></gradient>'
+      lore:
+        - '<gray>Setze dein eigenes Prefix'
+        - '<dark_gray>/prefix <MiniMessage>'
+
+    reset:
+      enabled: true
+      slot: 38
+      material: BARRIER
+      name: '<red>Namen zurücksetzen</red>'
+      lore: []
+
+    reset-prefix:
+      enabled: true
+      slot: 42
+      material: STRUCTURE_VOID
+      name: '<red>Prefix entfernen</red>'
+      lore: []
+
+    # --- SCHLIESSEN-BUTTON ---
+    close:
+      enabled: true
+      slot: 49
+      material: RED_STAINED_GLASS_PANE
+      name: '<red><b>Schließen</b></red>'
+      lore: []
+
+# ==========================================================
+#  FARB-AUSWAHL (Selector)
+#  Farben können beliebig ergänzt, entfernt oder umsortiert
+#  werden. Ohne "slot" werden sie automatisch platziert.
+#    name        = Item-Name
+#    material    = Item
+#    format      = MiniMessage Format, <player> = Spielername
+#    slot        = optional, fester Slot
+#    permission  = optional, benötigte Permission
+#    lore        = optional, eigene Lore (leer = keine Lore)
+# ==========================================================
+color-menu:
+  title: '<gradient:#7688FF:#9584FF><b>ꜰᴀʀʙᴇɴ</b></gradient>'
+  rows: 6
+
+  filler:
+    enabled: true
+    material: BLACK_STAINED_GLASS_PANE
+    name: ' '
+    lore: []
+
+  preview:
+    enabled: true
+    slot: 4
+    material: PLAYER_HEAD
+    name: '<preview>'
+    lore: []
 
   back-button:
+    enabled: true
+    slot: 48
+    material: ARROW
+    name: '<yellow>Zurück</yellow>'
+    lore: []
+
+  close-button:
+    enabled: true
+    slot: 50
     material: RED_STAINED_GLASS_PANE
-    name: '&cZurück'
+    name: '<red><b>Schließen</b></red>'
+    lore: []
 
-  reset-item:
-    material: BARRIER
-    name: '&cName zurücksetzen'
-    lore:
-      - '&7Setze deinen Namen auf'
-      - '&7den Standard zurück'
-
-presets:
-  - '&cRot'
-  - '&6Gold'
-  - '&eGelb'
-  - '&aGrün'
-  - '&bTürkis'
-  - '&9Blau'
-  - '&dPink'
-  - '&5Lila'
-  - '&fWeiß'
-  - '&7Grau'
-  - '&8Dunkelgrau'
-  - '&1Dunkelblau'
-  - '&2Dunkelgrün'
-  - '&4Dunkelrot'
-  - '&0Schwarz'
+  colors:
+    - name: '<red>Rot</red>'
+      material: RED_DYE
+      format: '<red><player></red>'
+    - name: '<gold>Gold</gold>'
+      material: ORANGE_DYE
+      format: '<gold><player></gold>'
+    - name: '<yellow>Gelb</yellow>'
+      material: YELLOW_DYE
+      format: '<yellow><player></yellow>'
+    - name: '<green>Grün</green>'
+      material: LIME_DYE
+      format: '<green><player></green>'
+    - name: '<aqua>Türkis</aqua>'
+      material: CYAN_DYE
+      format: '<aqua><player></aqua>'
+    - name: '<blue>Blau</blue>'
+      material: BLUE_DYE
+      format: '<blue><player></blue>'
+    - name: '<light_purple>Pink</light_purple>'
+      material: PINK_DYE
+      format: '<light_purple><player></light_purple>'
+    - name: '<dark_purple>Lila</dark_purple>'
+      material: PURPLE_DYE
+      format: '<dark_purple><player></dark_purple>'
+    - name: '<white>Weiß</white>'
+      material: WHITE_DYE
+      format: '<white><player></white>'
+    - name: '<gray>Grau</gray>'
+      material: LIGHT_GRAY_DYE
+      format: '<gray><player></gray>'
+    - name: '<dark_gray>Dunkelgrau</dark_gray>'
+      material: GRAY_DYE
+      format: '<dark_gray><player></dark_gray>'
+    - name: '<dark_red>Dunkelrot</dark_red>'
+      material: RED_DYE
+      format: '<dark_red><player></dark_red>'
+    - name: '<dark_green>Dunkelgrün</dark_green>'
+      material: GREEN_DYE
+      format: '<dark_green><player></dark_green>'
+    - name: '<dark_aqua>Dunkeltürkis</dark_aqua>'
+      material: LIGHT_BLUE_DYE
+      format: '<dark_aqua><player></dark_aqua>'
+    - name: '<black>Schwarz</black>'
+      material: BLACK_DYE
+      format: '<black><player></black>'
+    # --- Beispiele für eigene Gradients / Effekte ---
+    - name: '<gradient:#7688FF:#9584FF><b>Gooner</b></gradient>'
+      material: AMETHYST_SHARD
+      format: '<b><gradient:#7688FF:#9584FF><shadow:#183931:1><player></shadow></gradient></b>'
+    - name: '<rainbow>Regenbogen</rainbow>'
+      material: NETHER_STAR
+      format: '<rainbow><player></rainbow>'
+      permission: 'customname.color.rainbow'
+    - name: '<gradient:#FF512F:#F09819>Sunset</gradient>'
+      material: MAGMA_CREAM
+      format: '<gradient:#FF512F:#F09819><player></gradient>'

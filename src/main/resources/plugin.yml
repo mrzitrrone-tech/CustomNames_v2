@@ -1,16 +1,21 @@
 name: CustomName
-version: 1.0.0
+version: '${project.version}'
 main: mrzitrrone.CustomNamePlugin
 api-version: '1.21'
 folia-supported: true
 author: MrZitrrone
-description: Custom Names mit MiniMessage Support
+description: Custom Names & Prefixe mit vollem MiniMessage Support
+softdepend: [PlaceholderAPI]
 
 commands:
   customname:
     description: Ändere deinen angezeigten Namen
     usage: /customname [MiniMessage Format]
     aliases: [cn, nickname]
+  prefix:
+    description: Setze dein Prefix (MiniMessage)
+    usage: /prefix <MiniMessage> | /prefix reset | /prefix set <Spieler> <Prefix>
+    aliases: [cnprefix, tag]
 
 permissions:
   customname.use:
@@ -19,6 +24,15 @@ permissions:
   customname.nick:
     description: Erlaubt das Ändern des kompletten Namens (Nick)
     default: false
+  customname.prefix.use:
+    description: Erlaubt das Setzen eines eigenen Prefixes
+    default: false
+  customname.prefix.others:
+    description: Erlaubt das Setzen von Prefixen anderer Spieler
+    default: op
+  customname.color.rainbow:
+    description: Zugriff auf die Regenbogen-Farbe im GUI
+    default: op
   customname.admin:
     description: Admin Berechtigung
     default: op

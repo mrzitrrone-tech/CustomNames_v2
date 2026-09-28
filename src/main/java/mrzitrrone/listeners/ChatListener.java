@@ -2,6 +2,7 @@ package mrzitrrone.listeners;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import mrzitrrone.CustomNamePlugin;
+import mrzitrrone.util.SchedulerUtil;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,22 +23,27 @@ public class ChatListener implements Listener {
     public void onChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
 
-        if (!guiListener.isAwaitingInput(player.getUniqueId())) {
+        GUIListener.InputType type = guiListener.getInputType(player.getUniqueId());
+        if (type == null) {
             return;
         }
 
         event.setCancelled(true);
-        guiListener.setAwaitingInput(player.getUniqueId(), false);
+        guiListener.clearInput(player.getUniqueId());
 
-        String message = PlainTextComponentSerializer.plainText().serialize(event.message());
+        String message = PlainTextComponentSerializer.plainText().serialize(event.message()).trim();
 
         if (message.equalsIgnoreCase("cancel") || message.equalsIgnoreCase("abbrechen")) {
-            player.sendMessage(plugin.getConfigManager().getMessage("chat-cancelled"));
+            player.sendMessage(plugin.getConfigManager().msg("chat-cancelled"));
             return;
         }
 
-        player.getScheduler().run(plugin, (task) -> {
-            player.performCommand("customname " + message);
-        }, null);
+        final String command = switch (type) {
+            case PREFIX -> "prefix " + message;
+            case NAME -> "customname " + message;
+        };
+
+        // Chat ist async – Ausführung Folia-sicher im Kontext des Spielers
+        SchedulerUtil.runForPlayer(plugin, player, () -> player.performCommand(command));
     }
 }
